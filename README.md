@@ -1,2 +1,5 @@
 # paradise
-Smart and smooth path to regex
+
+![paradise logo](https://i.ibb.co/Kq6gpMC/paradise-small.png)
+
+**Smart and smooth Dynamic Path Parser**
