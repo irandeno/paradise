@@ -1,5 +1,7 @@
 # paradise
 
-![paradise logo](https://i.ibb.co/Kq6gpMC/paradise-small.png)
+![paradise logo](https://i.ibb.co/12J6h0t/paradise-small.png)
 
-**Smart and smooth Dynamic Path Parser**
+**Smart and smooth Dynamic Pattern Parser**
+- Came with a Grate string lexer and Tokenizer
+
