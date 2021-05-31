@@ -28,3 +28,29 @@ Deno.test("shouldn't return ignored matches", () => {
   const tokens = tokenizer.tokenize("one_two");
   assertEquals(tokens, [{ value: "two", type: "valid" }]);
 });
+
+Deno.test("should return custom manipulated value", () => {
+  tokenizer.setStates({
+    main: {
+      vehicle: {
+        match: "car",
+        value: () => "airplane",
+      },
+    },
+  });
+  const tokens = tokenizer.tokenize("car");
+  assertEquals(tokens, [{ value: "airplane", type: "vehicle" }]);
+});
+
+Deno.test("should throw with syntax error while ignored", () => {
+  tokenizer.setStates({
+    main: {
+      vehicle: {
+        match: "car",
+        value: () => "airplane",
+        ignore: true,
+      },
+    },
+  });
+  assertThrows(() => tokenizer.tokenize("motorcycle"));
+});

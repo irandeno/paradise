@@ -18,6 +18,7 @@ export interface RuleOptions {
   ignore?: boolean;
   push?: string;
   pop?: number;
+  value?: (data: string) => string;
 }
 
 export interface Token {
@@ -103,7 +104,7 @@ export class Tokenizer {
   private matchString(matcher: string, params: MatcherParams) {
     let { name, options } = params;
     if (this.pattern.indexOf(matcher) === 0) {
-      this.storeToken(matcher, name, options?.ignore || false);
+      this.storeToken(matcher, name, options);
       this.pattern = this.pattern.replace(matcher, "");
       return this.handleOptions(options);
     }
@@ -117,7 +118,7 @@ export class Tokenizer {
       matchedValue.length &&
       this.pattern.indexOf(matchedValue[0]) === 0
     ) {
-      this.storeToken(matchedValue[0], name, options?.ignore || false);
+      this.storeToken(matchedValue[0], name, options);
       this.pattern = this.pattern.replace(matchedValue[0], "");
       return this.handleOptions(options);
     }
@@ -128,7 +129,7 @@ export class Tokenizer {
     for (let j = 0; j < matcher.length; j++) {
       const ruleMatcher = matcher[j];
       if (this.pattern.indexOf(ruleMatcher) === 0) {
-        this.storeToken(ruleMatcher, name, options?.ignore || false);
+        this.storeToken(ruleMatcher, name, options);
         this.pattern = this.pattern.replace(ruleMatcher, "");
         return this.handleOptions(options);
       }
@@ -163,8 +164,15 @@ export class Tokenizer {
     return this.internalTokenize();
   }
 
-  private storeToken(value: string, type: string, ignore: boolean = false) {
-    if (ignore) return;
+  private storeToken(
+    value: string,
+    type: string,
+    options?: Partial<RuleOptions>,
+  ) {
+    if (options && options.ignore) return;
+    if (options && options.value) {
+      return this.tokens.push({ type, value: options.value(value) });
+    }
     this.tokens.push({ type, value });
   }
 }
