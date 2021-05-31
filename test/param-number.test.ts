@@ -32,3 +32,13 @@ Deno.test("shouldn't match string with multiple number parameter", () => {
   const multiply = parse("{first:number}*{second:number}");
   assertNotMatch("4/2", multiply as RegExp);
 });
+
+Deno.test("shouldn't match string including alphabetical chars", () => {
+  const multiply = parse("{first:number}");
+  assertNotMatch("123abc", multiply as RegExp);
+});
+
+Deno.test("shouldn't match string including extra characters", () => {
+  const multiply = parse("{first:number}+{second:number}");
+  assertNotMatch("1+2+3", multiply as RegExp);
+});
