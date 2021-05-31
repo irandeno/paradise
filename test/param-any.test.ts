@@ -7,20 +7,20 @@ import {
 import { parse } from "../mod.ts";
 
 Deno.test("should recognize no param-type as 'any' and cast to string", () => {
-  assertEquals(parse("{name}"), /(?<name>.+)/);
+  assertEquals(parse("{name}"), /^(?<name>.+)$/);
 });
 
 Deno.test("should return multiple identifiers as a regex", () => {
   assertEquals(
     parse("{firstName}_{lastName}"),
-    /(?<firstName>.+)_(?<lastName>.+)/,
+    /^(?<firstName>.+)_(?<lastName>.+)$/,
   );
 });
 
 Deno.test(
   "should return identifier concatenated with a custom character",
   () => {
-    assertEquals(parse("@{username}"), /@(?<username>.+)/);
+    assertEquals(parse("@{username}"), /^@(?<username>.+)$/);
   },
 );
 
@@ -30,7 +30,7 @@ Deno.test("should match 'any' with one 'any' parameter", () => {
 });
 
 Deno.test("should match 'any' with multiple 'any' parameter", () => {
-  const sum = parse("/{command}_music{number}");
+  const sum = parse("/{command}_music{id}");
   assertMatch("/download_music1", sum as RegExp);
 });
 

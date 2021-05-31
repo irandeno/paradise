@@ -127,8 +127,8 @@ with support of strings, regex and arrays.
     tokenizer.tokenize("car"); // => [ { type: "vehicle", value: "airplane" } ]
     ```
 
-  - `multi-state matcher` states can be define in multiple levels and match
-    with different set of rules
+  - `multi-state matcher` states can be define in multiple levels and match with
+    different set of rules
 
     ```typescript
     import { Tokenizer } from "https://deno.land/x/paradise@0.2.0/tokenizer/mod.ts";

@@ -7,20 +7,20 @@ import {
 import { parse } from "../mod.ts";
 
 Deno.test("should return single identifier as a regex", () => {
-  assertEquals(parse("{name:string}"), /(?<name>.+)/);
+  assertEquals(parse("{name:string}"), /^(?<name>.+)$/);
 });
 
 Deno.test("should return multiple identifiers as a regex", () => {
   assertEquals(
     parse("{firstName:string}_{lastName:string}"),
-    /(?<firstName>.+)_(?<lastName>.+)/,
+    /^(?<firstName>.+)_(?<lastName>.+)$/,
   );
 });
 
 Deno.test(
   "should return identifier concatenated with a custom character",
   () => {
-    assertEquals(parse("@{username:string}"), /@(?<username>.+)/);
+    assertEquals(parse("@{username:string}"), /^@(?<username>.+)$/);
   },
 );
 

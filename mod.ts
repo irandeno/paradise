@@ -40,7 +40,7 @@ export function parse(pattern: string): string | RegExp {
       result = result.concat(parameterToGroup(token.value, paramType));
     }
   }
-  return new RegExp(result);
+  return new RegExp(`^${result}$`);
 }
 
 const isString = (pattern: unknown): pattern is string =>

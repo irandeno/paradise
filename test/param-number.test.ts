@@ -7,15 +7,15 @@ import {
 import { parse } from "../mod.ts";
 
 Deno.test("should return single identifier as a regex", () => {
-  assertEquals(parse("{id:number}"), /(?<id>\d+)/);
+  assertEquals(parse("{id:number}"), /^(?<id>\d+)$/);
 });
 
 Deno.test("should return multiple identifiers as a regex", () => {
-  assertEquals(parse("{id:number}_{rank:number}"), /(?<id>\d+)_(?<rank>\d+)/);
+  assertEquals(parse("{id:number}_{rank:number}"), /^(?<id>\d+)_(?<rank>\d+)$/);
 });
 
 Deno.test("should return identifier concatenated with a custom string", () => {
-  assertEquals(parse("user:{id:number}"), /user:(?<id>\d+)/);
+  assertEquals(parse("user:{id:number}"), /^user:(?<id>\d+)$/);
 });
 
 Deno.test("should match string with one number parameter", () => {
