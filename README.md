@@ -60,7 +60,7 @@ with support of strings, regex and arrays.
 
 - ### Usage
 
-  - `string matcher`: Achieve characters that exactly match the defined string
+  - `string matcher` Achieve characters that exactly match the defined string
 
     ```typescript
     const tokenizer = new Tokenizer({
@@ -72,7 +72,7 @@ with support of strings, regex and arrays.
     tokenizer.tokenize("1"); // => [ { type: "one", value: "1" } ]
     ```
 
-  - `regex matcher`: Achieve characters that exactly match the defined RegExp
+  - `regex matcher` Achieve characters that exactly match the defined RegExp
 
     ```typescript
     import { Tokenizer } from "https://deno.land/x/paradise@0.2.0/tokenizer/mod.ts";
@@ -86,7 +86,7 @@ with support of strings, regex and arrays.
     tokenizer.tokenize("1"); // => [ { type: "digit", value: "1" } ]
     ```
 
-  - `array matcher`: Achieve characters that match any of defined strings
+  - `array matcher` Achieve characters that match any of defined strings
 
     ```typescript
     import { Tokenizer } from "https://deno.land/x/paradise@0.2.0/tokenizer/mod.ts";
@@ -100,7 +100,7 @@ with support of strings, regex and arrays.
     tokenizer.tokenize("three"); // => [ { type: "triple", value: "three" } ]
     ```
 
-  - `options`: Matcher can be an object with some customizations
+  - `options` Matcher can be an object with some customizations
 
     ```typescript
     import { Tokenizer } from "https://deno.land/x/paradise@0.2.0/tokenizer/mod.ts";
@@ -127,7 +127,7 @@ with support of strings, regex and arrays.
     tokenizer.tokenize("car"); // => [ { type: "vehicle", value: "airplane" } ]
     ```
 
-  - `multi-state matcher`: states can be define in multiple levels and match
+  - `multi-state matcher` states can be define in multiple levels and match
     with different set of rules
 
     ```typescript
