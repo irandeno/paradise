@@ -1,4 +1,4 @@
-import { Tokenizer } from "./tokenizer/mod.ts";
+import { Token, Tokenizer } from "./tokenizer/mod.ts";
 const regexTokens = ["+", "?", "[", "]", "*", ".", "|", "^", "$", "(", ")"];
 
 export function parse(pattern: string): string | RegExp {
@@ -18,9 +18,18 @@ export function parse(pattern: string): string | RegExp {
       type: ["string", "number", "any"],
       colon: { match: ":", ignore: true },
       identifier: /[a-zA-Z0-9]+/,
+      explicitValue: {
+        match: [/"(?:\\["\\]|[^\n"\\])*?"/, /'(?:\\["\\]|[^\n"\\])*?'/],
+        value: (val: string) =>
+          val.startsWith('"')
+            ? val.replaceAll('"', "")
+            : val.replaceAll("'", ""),
+      },
+      or: "|",
       endParam: { match: "}", pop: 1 },
     },
   };
+
   const tokenizer = new Tokenizer(states);
   const tokens = tokenizer.tokenize(pattern);
   let result = "";
@@ -30,12 +39,19 @@ export function parse(pattern: string): string | RegExp {
     } else if (token.type === "identifier") {
       const currentTokenIndex = tokens.indexOf(token);
       const restOfArray = tokens.slice(currentTokenIndex + 1);
-      if (!restOfArray.some((item) => item.type === "endParam")) {
+      if (
+        !restOfArray.length ||
+        !restOfArray.some((item) => item.type === "endParam")
+      ) {
         throw new Error("unclosed parameter");
       }
       const nextElement = restOfArray[0];
       const paramType = typeof nextElement !== "undefined"
-        ? nextElement.type === "type" ? nextElement.value : "string"
+        ? nextElement.type === "type"
+          ? nextElement.value
+          : nextElement.type === "explicitValue"
+          ? handleExplicitValues(restOfArray)
+          : "string"
         : "string";
       result = result.concat(parameterToGroup(token.value, paramType));
     }
@@ -59,7 +75,24 @@ function parameterToGroup(identifier: string, paramType: string): string {
       matcher = "\\d+";
       break;
     default:
-      throw new Error("unrecognized paramter type");
+      matcher = paramType;
   }
   return `(?<${identifier}>${matcher})`;
+}
+
+function handleExplicitValues(restOfElements: Token[]) {
+  let total = "";
+  let elements = restOfElements;
+  while (
+    elements[0].type === "or" ||
+    elements[0].type === "explicitValue"
+  ) {
+    if (elements[0].type === "explicitValue") {
+      total = total.concat(elements[0].value);
+    } else if (elements[0].type === "or") {
+      total = total.concat(elements[0].value);
+    }
+    elements.shift();
+  }
+  return total;
 }

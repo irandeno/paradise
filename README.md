@@ -32,21 +32,28 @@ with support of strings, regex and arrays.
   - `parse string parameter`
 
     ```typescript
-    parse("@{username:string}"); // => /@(?<username>.+)/
+    parse("@{username:string}"); // => /^@(?<username>.+)$/
     // can match : @disizali, @anyId
     ```
 
   - `parse number parameter`
 
     ```typescript
-    parse("/id_{id:number}"); // => /id_(?<command>\d+>)/
+    parse("/id_{id:number}"); // => /^id_(?<command>\d+>)$/
     // can match : /id_1, /id_50
+    ```
+
+  - `parse selective parameters`
+
+    ```typescript
+    parse("{nature:'human'|'robot'|'alien'}"); // => /^(?<nature>human|robot|alien)$/
+    // can match : /download_music1, /delete_music2
     ```
 
   - `parse concatenated parameters`
 
     ```typescript
-    parse("/{command}_music{id:number}"); // => \/(?<command>.+)_music(?<id>\d+)
+    parse("/{command}_music{id:number}"); // => \^/(?<command>.+)_music(?<id>\d+$)
     // can match : /download_music1, /delete_music2
     ```
 

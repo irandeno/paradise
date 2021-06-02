@@ -2,10 +2,10 @@ export interface States {
   [name: string]: Rule;
 }
 
-export type Matcher = RuleOptions | string | string[] | RegExp;
+export type Matcher = RuleOptions | string | RegExp | Array<string | RegExp>;
 
 export interface Rule {
-  [name: string]: RuleOptions | string | string[] | RegExp;
+  [name: string]: Matcher;
 }
 
 export interface MatcherParams {
@@ -14,7 +14,7 @@ export interface MatcherParams {
 }
 
 export interface RuleOptions {
-  match: string | RegExp | string[];
+  match: string | RegExp | Array<string | RegExp>;
   ignore?: boolean;
   push?: string;
   pop?: number;
@@ -124,14 +124,13 @@ export class Tokenizer {
     }
   }
 
-  private matchArray(matcher: string[], params: MatcherParams) {
-    let { name, options } = params;
+  private matchArray(matcher: Array<string | RegExp>, params: MatcherParams) {
     for (let j = 0; j < matcher.length; j++) {
       const ruleMatcher = matcher[j];
-      if (this.pattern.indexOf(ruleMatcher) === 0) {
-        this.storeToken(ruleMatcher, name, options);
-        this.pattern = this.pattern.replace(ruleMatcher, "");
-        return this.handleOptions(options);
+      if (ruleMatcher instanceof RegExp) {
+        this.matchRegex(ruleMatcher, params);
+      } else if (typeof ruleMatcher === "string") {
+        this.matchString(ruleMatcher, params);
       }
     }
   }
