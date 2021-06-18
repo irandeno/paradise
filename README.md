@@ -47,7 +47,7 @@ with support of strings, regex and arrays.
 
     ```typescript
     parse("{nature:'human'|'robot'|'alien'}"); // => /^(?<nature>human|robot|alien)$/
-    // can match : /download_music1, /delete_music2
+    // can match : human, robot, alien
     ```
 
   - `parse concatenated parameters`
